@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0b0e14">
+<title>Bot Center</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;background:#0b0e14;color:#f1f5f9;
+ font-family:Arial,sans-serif;padding:20px;
+}
+header{
+ display:flex;justify-content:space-between;
+ align-items:center;margin-bottom:30px;
+}
+.logo{font-size:25px;font-weight:bold;color:#8b9cff}
+.logo span{color:white}
+button{
+ border:0;border-radius:12px;padding:12px 16px;
+ background:#5969ed;color:white;font-weight:bold;
+ cursor:pointer;
+}
+.container{max-width:850px;margin:auto}
+.welcome{
+ background:linear-gradient(130deg,#202b58,#151a2c);
+ border:1px solid #303b70;border-radius:20px;
+ padding:24px;margin-bottom:22px;
+}
+.welcome h1{margin:0 0 12px;font-size:25px}
+.welcome p{color:#c3cbea;line-height:1.8}
+.section-title{font-size:19px;margin:28px 0 15px}
+.stats{
+ display:grid;grid-template-columns:repeat(2,1fr);
+ gap:12px;
+}
+.card{
+ background:#141923;border:1px solid #252d3b;
+ border-radius:16px;padding:18px;
+}
+.stat-number{font-size:25px;font-weight:bold;margin-top:10px}
+.bot{
+ display:flex;align-items:center;gap:14px;
+}
+.bot-icon{
+ width:48px;height:48px;border-radius:15px;
+ background:#26345e;display:grid;place-items:center;
+ font-size:24px;
+}
+.bot-info{flex:1;min-width:0}
+.bot-info p{color:#9ca8bc;margin:7px 0 0}
+.status{color:#56d69a;font-size:13px}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.secondary{background:#252d3b;color:white}
+footer{text-align:center;color:#778196;margin:35px 0 10px;font-size:13px}
+@media(min-width:600px){.stats{grid-template-columns:repeat(4,1fr)}}
+</style>
+</head>
+<body>
+<div class="container">
+<header>
+ <div class="logo">BOT <span>CENTER</span></div>
+ <button onclick="toggleLanguage()" id="lang">English</button>
+</header>
+
+<section class="welcome">
+ <h1 id="welcomeTitle">مرحباً بك في Bot Center 👋</h1>
+ <p id="welcomeText">
+ منصتك لإدارة جميع بوتات تيليجرام من مكان واحد.
+ تحكم ببوتاتك، تابع الإحصائيات، وأدر خدماتك بسهولة.
+ </p>
+ <button onclick="showMessage()" id="addButton">＋ إضافة بوت جديد</button>
+</section>
+
+<h2 class="section-title" id="statsTitle">نظرة عامة</h2>
+<div class="stats">
+ <div class="card">
+  <div id="s1">البوتات</div>
+  <div class="stat-number">1</div>
+ </div>
+ <div class="card">
+  <div id="s2">المستخدمون</div>
+  <div class="stat-number">—</div>
+ </div>
+ <div class="card">
+  <div id="s3">الاشتراكات</div>
+  <div class="stat-number">—</div>
+ </div>
+ <div class="card">
+  <div id="s4">حالة المنصة</div>
+  <div class="stat-number" style="color:#56d69a">●</div>
+ </div>
+</div>
+
+<h2 class="section-title" id="botsTitle">بوتاتي</h2>
+<div class="card">
+ <div class="bot">
+  <div class="bot-icon">🤖</div>
+  <div class="bot-info">
+   <strong>@SS_FBot</strong>
+   <p id="botDescription">بوت التواصل</p>
+   <span class="status" id="botStatus">● مضاف إلى المنصة</span>
+  </div>
+ </div>
+ <div class="actions">
+  <button onclick="showMessage()" id="manage">إدارة البوت</button>
+  <button class="secondary" onclick="showMessage()" id="details">التفاصيل</button>
+ </div>
+</div>
+
+<footer>Bot Center © 2026</footer>
+</div>
+
+<script>
+let english=false;
+function toggleLanguage(){
+ english=!english;
+ document.documentElement.lang=english?'en':'ar';
+ document.documentElement.dir=english?'ltr':'rtl';
+ document.getElementById('lang').textContent=english?'العربية':'English';
+ const values={
+ welcomeTitle:['مرحباً بك في Bot Center 👋','Welcome to Bot Center 👋'],
+ welcomeText:['منصتك لإدارة جميع بوتات تيليجرام من مكان واحد. تحكم ببوتاتك، تابع الإحصائيات، وأدر خدماتك بسهولة.','Your platform to manage all your Telegram bots in one place.'],
+ addButton:['＋ إضافة بوت جديد','＋ Add New Bot'],
+ statsTitle:['نظرة عامة','Overview'],
+ s1:['البوتات','Bots'],s2:['المستخدمون','Users'],
+ s3:['الاشتراكات','Subscriptions'],s4:['حالة المنصة','Platform Status'],
+ botsTitle:['بوتاتي','My Bots'],
+ botDescription:['بوت التواصل','Contact Bot'],
+ botStatus:['● مضاف إلى المنصة','● Added to platform'],
+ manage:['إدارة البوت','Manage Bot'],
+ details:['التفاصيل','Details']
+ };
+ for(const id in values)
+  document.getElementById(id).textContent=values[id][english?1:0];
+}
+function showMessage(){
+ alert(english?'This feature will be activated after connecting the platform backend.':'سيتم تفعيل هذه الميزة بعد ربط المنصة بالنظام الخلفي.');
+}
+</script>
+</body>
+</html>
