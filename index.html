@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0b1020">
+  <meta name="description" content="Bot Center - منصة لإدارة تطبيقات البوتات">
+  <title>Bot Center</title>
+  <link rel="stylesheet" href="./static/style.css">
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+  <main class="shell">
+    <header class="top">
+      <a class="brand" href="./" aria-label="Bot Center">
+        <span class="logo">BC</span>
+        <span class="brand-copy"><b>Bot Center</b><small data-ar="منصتك لإدارة تطبيقات البوتات" data-en="Your bot management platform">منصتك لإدارة تطبيقات البوتات</small></span>
+      </a>
+      <button class="lang" id="langBtn" type="button">EN</button>
+    </header>
+
+    <section class="hero">
+      <div class="hero-content">
+        <span class="eyebrow" data-ar="منصة واحدة • بوتات متعددة" data-en="ONE PLATFORM • MANY BOTS">منصة واحدة • بوتات متعددة</span>
+        <h1 data-ar="كل بوتاتك،<br>بمكان واحد." data-en="All your bots,<br>in one place.">كل بوتاتك،<br>بمكان واحد.</h1>
+        <p data-ar="واجهة موحّدة لإدارة مشاريعك وخدماتك داخل تيليجرام، مع مساحة قابلة للتوسع لإضافة المزيد من البوتات." data-en="A unified home for your Telegram projects and services, designed to grow as you add more bots.">واجهة موحّدة لإدارة مشاريعك وخدماتك داخل تيليجرام، مع مساحة قابلة للتوسع لإضافة المزيد من البوتات.</p>
+      </div>
+      <div class="hero-orb orb-one"></div><div class="hero-orb orb-two"></div>
+      <div class="hero-mark">BOT<br><strong>CENTER</strong></div>
+    </section>
+
+    <section class="section-head">
+      <div><span class="kicker" data-ar="مساحة العمل" data-en="WORKSPACE">مساحة العمل</span><h2 data-ar="تطبيقاتك" data-en="Your apps">تطبيقاتك</h2></div>
+      <span class="live"><i></i><span data-ar="الواجهة جاهزة" data-en="INTERFACE READY">الواجهة جاهزة</span></span>
+    </section>
+
+    <article class="app-card">
+      <div class="app-icon">✉</div>
+      <div class="app-info"><b data-ar="بوت التواصل" data-en="Contact Bot">بوت التواصل</b><small data-ar="إرسال رسالة مباشرة إلى المطوّر" data-en="Send a message directly to the developer">إرسال رسالة مباشرة إلى المطوّر</small><span class="app-tag" data-ar="التطبيق الأول" data-en="FIRST APP">التطبيق الأول</span></div>
+      <span class="arrow" aria-hidden="true">‹</span>
+    </article>
+
+    <section class="contact">
+      <div class="contact-title">
+        <div><span class="kicker" data-ar="تواصل مباشر" data-en="DIRECT CONTACT">تواصل مباشر</span><h2 data-ar="أرسل رسالتك" data-en="Send a message">أرسل رسالتك</h2><p data-ar="اكتب استفسارك وسنحاول إيصاله بأمان." data-en="Write your message and we'll try to deliver it securely.">اكتب استفسارك وسنحاول إيصاله بأمان.</p></div>
+        <div class="bubble">↗</div>
+      </div>
+      <label class="sr-only" for="message" data-ar="نص الرسالة" data-en="Message text">نص الرسالة</label>
+      <textarea id="message" maxlength="3000" placeholder="اكتب رسالتك هنا..." aria-describedby="count status"></textarea>
+      <div class="form-meta"><span id="status" class="status" role="status" aria-live="polite"></span><span class="counter"><b id="count">0</b>/3000</span></div>
+      <button class="send" id="sendBtn" type="button"><span data-ar="إرسال الرسالة" data-en="Send message">إرسال الرسالة</span><b>←</b></button>
+      <p class="backend-note" data-ar="إرسال الرسائل يحتاج إلى تشغيل الخادم الخلفي وربطه بالمنصة." data-en="Message delivery requires the backend server to be deployed and connected.">إرسال الرسائل يحتاج إلى تشغيل الخادم الخلفي وربطه بالمنصة.</p>
+    </section>
+
+    <footer><span>BOT CENTER</span><span data-ar="منصة قابلة للتطوير" data-en="BUILT TO SCALE">منصة قابلة للتطوير</span></footer>
+  </main>
+  <script src="./static/app.js"></script>
+</body>
+</html>
