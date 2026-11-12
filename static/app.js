@@ -46,7 +46,43 @@
   const byId=id=>document.getElementById(id);
   const esc=value=>String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
   const date=value=>value?new Date(value*1000).toLocaleDateString("ar-IQ"):"—";
-  async function loadStats(){
+
+  async function loadBots(){
+    const box=byId("myBotsList");
+    box.innerHTML='<p class="empty-state">جاري تحميل البوتات...</p>';
+    try{
+      const bots=await api("/api/bots");
+      box.innerHTML=bots.length?bots.map(bot=>`
+        <div class="admin-row">
+          <div class="row-main"><b>🤖 @${esc(bot.username)}</b><small>رقم الربط: #${bot.id} · تاريخ الإضافة: ${date(bot.created_at)}</small><span class="bot-state">مرتبط فقط · التشغيل خارجي</span></div>
+          <button class="bot-disconnect" data-disconnect-bot="${bot.id}">فصل</button>
+        </div>`).join(""):'<p class="empty-state">ما عندك بوتات مرتبطة حالياً.</p>';
+    }catch(e){box.innerHTML='<p class="empty-state error-text">'+esc(e.message)+'</p>';}
+  }
+  byId("addBotBtn").addEventListener("click",async()=>{
+    const input=byId("botToken"),status=byId("botStatus"),button=byId("addBotBtn");
+    const token=input.value.trim();status.classList.remove("error");
+    if(!token){status.textContent="أدخل توكن البوت أولاً.";status.classList.add("error");return;}
+    if(!tg?.initData){status.textContent="افتح المنصة من داخل تيليجرام.";status.classList.add("error");return;}
+    button.disabled=true;status.textContent="جاري التحقق من التوكن...";
+    try{
+      const result=await api("/api/bots",{method:"POST",body:JSON.stringify({token})});
+      input.value="";status.textContent="تم ربط @"+result.username+" بنجاح ✓";
+      await loadBots();tg.HapticFeedback?.notificationOccurred("success");
+    }catch(e){status.textContent="تعذر الربط: "+e.message;status.classList.add("error");}
+    finally{button.disabled=false;}
+  });
+  byId("refreshBots").addEventListener("click",loadBots);
+  byId("myBotsList").addEventListener("click",async event=>{
+    const button=event.target.closest("[data-disconnect-bot]");
+    if(!button)return;
+    if(!confirm("فصل هذا البوت من Bot Center؟ هذا لا يوقفه في المصنع الخارجي."))return;
+    button.disabled=true;
+    try{await api("/api/bots/"+button.dataset.disconnectBot,{method:"DELETE"});await loadBots();}
+    catch(e){alert("تعذر الفصل: "+e.message);button.disabled=false;}
+  });
+  loadBots();
+\n  async function loadStats(){
     const s=await api("/api/admin/stats");
     byId("statUsers").textContent=s.users;byId("statBots").textContent=s.bots;
     byId("statPayments").textContent=s.pending_payments;byId("statBanned").textContent=s.banned_users;
