@@ -69,9 +69,76 @@
       box.innerHTML=payments.length?payments.map(p=>`<div class="admin-row payment-row"><div class="row-main"><b>طلب #${p.id} · ${esc(p.amount)}</b><small>المستخدم: ${p.user_id} · الطريقة: ${esc(p.method)} · المرجع: ${esc(p.reference||"—")}</small><small>${date(p.created_at)}</small></div><div class="row-actions"><button class="mini-action approve" data-payment="${p.id}" data-approve="true">قبول</button><button class="mini-action reject" data-payment="${p.id}" data-approve="false">رفض</button></div></div>`).join(""):'<p class="empty-state">لا توجد طلبات دفع معلّقة.</p>';
     }catch(e){box.innerHTML='<p class="empty-state error-text">'+esc(e.message)+'</p>';}
   }
+  const paymentLabels={stars:"⭐ نجوم تيليجرام",asiacell:"📱 آسياسيل",bank_transfer:"🏦 التحويل البنكي",card:"💳 الكارت"};
+  async function loadPaymentMethodsAdmin(){
+    const box=byId("paymentMethodsAdmin");
+    box.innerHTML='<p class="empty-state">جاري التحميل...</p>';
+    try{
+      const result=await api("/api/admin/payment-methods");
+      box.innerHTML=Object.entries(result.methods).map(([key,item])=>`
+        <div class="payment-method-editor" data-payment-method="${key}">
+          <div class="payment-method-top"><b>${paymentLabels[key]||esc(item.label)}</b>
+            <label class="switch-label"><input class="method-enabled" type="checkbox" ${item.enabled?"checked":""}> تفعيل</label>
+          </div>
+          <label>تعليمات الدفع / رقم الحساب
+            <textarea class="method-instructions" maxlength="1500" rows="3" placeholder="اكتب تفاصيل الدفع التي ستظهر للمستخدم">${esc(item.instructions||"")}</textarea>
+          </label>
+        </div>`).join("");
+    }catch(e){box.innerHTML='<p class="empty-state error-text">'+esc(e.message)+'</p>';}
+  }
+  async function savePaymentMethods(){
+    const status=byId("paymentMethodsStatus");
+    const methods={};
+    document.querySelectorAll("[data-payment-method]").forEach(card=>{
+      methods[card.dataset.paymentMethod]={
+        enabled:card.querySelector(".method-enabled").checked,
+        instructions:card.querySelector(".method-instructions").value.trim()
+      };
+    });
+    status.textContent="جاري الحفظ...";
+    try{
+      await api("/api/admin/payment-methods",{method:"PUT",body:JSON.stringify({methods})});
+      status.textContent="تم حفظ وسائل الدفع بنجاح ✓";
+      await loadPublicPaymentMethods();
+    }catch(e){status.textContent="تعذر الحفظ: "+e.message;}
+  }
+  async function loadPublicPaymentMethods(){
+    const box=byId("publicPaymentMethods");
+    try{
+      const result=await fetch(API+"/api/payment-methods");
+      const data=await result.json().catch(()=>({}));
+      if(!result.ok)throw new Error(data.detail||"تعذر تحميل وسائل الدفع");
+      const methods=Object.entries(data.methods||{});
+      box.innerHTML=methods.length?methods.map(([key,item])=>`
+        <button type="button" class="public-payment-button" data-public-method="${key}" data-instructions="${esc(item.instructions||"")}" data-label="${esc(item.label||paymentLabels[key]||key)}">
+          <span>${paymentLabels[key]||esc(item.label||key)}</span><small>إرسال طلب اشتراك</small>
+        </button>`).join(""):'<p class="empty-state">لا توجد وسائل دفع متاحة حالياً.</p>';
+      box.dataset.price=data.plan?.price||"";
+    }catch(e){box.innerHTML='<p class="empty-state error-text">'+esc(e.message)+'</p>';}
+  }
+  byId("publicPaymentMethods").addEventListener("click",async event=>{
+    const button=event.target.closest("[data-public-method]");
+    if(!button)return;
+    if(!tg?.initData){alert("افتح المنصة من داخل تيليجرام حتى ترسل طلب الدفع.");return;}
+    const instructions=button.dataset.instructions||"لا توجد تعليمات إضافية.";
+    alert(button.dataset.label+"\\n\\n"+instructions);
+    const amount=prompt("أدخل المبلغ المطلوب دفعه:",byId("publicPaymentMethods").dataset.price||"");
+    if(amount===null||!amount.trim())return;
+    const reference=prompt("أدخل رقم العملية أو ملاحظة الدفع (اختياري):")||"";
+    button.disabled=true;
+    try{
+      const response=await api("/api/payments",{method:"POST",body:JSON.stringify({method:button.dataset.publicMethod,amount:amount.trim(),reference:reference.trim()||null})});
+      alert("تم إرسال طلب الدفع رقم "+response.id+" بنجاح. انتظر مراجعة الإدارة.");
+    }catch(e){alert("تعذر إرسال الطلب: "+e.message);}
+    finally{button.disabled=false;}
+  });
+  byId("refreshPaymentMethods").addEventListener("click",loadPaymentMethodsAdmin);
+  byId("savePaymentMethods").addEventListener("click",savePaymentMethods);
+  loadPublicPaymentMethods();
+
   async function refreshAdmin(){
     byId("refreshAdmin").disabled=true;
-    try{await Promise.all([loadStats(),loadPlan(),loadUsers(),loadPayments()]);}
+    try{await Promise.all([loadStats(),loadPlan(),loadUsers(),loadPayments(),loadPaymentMethodsAdmin()]);}
     catch(e){console.error(e);}
     finally{byId("refreshAdmin").disabled=false;}
   }
