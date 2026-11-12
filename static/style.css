@@ -144,3 +144,5 @@ body.en .hero-mark{text-align:left}
 .bot-activity-dot{font-size:10px;color:#78a6ff;margin-top:2px}
 .bot-activity-item b{display:block;font-size:10px;color:#e4ebfa}
 .bot-activity-item small{display:block;font-size:9px;line-height:1.7;color:#94a4c0;margin-top:2px}
+
+.bot-search{width:100%;box-sizing:border-box;margin:10px 0 12px;padding:12px 14px;border:1px solid var(--line,#304363);border-radius:12px;background:var(--surface,#101d31);color:inherit;font:inherit;font-size:13px;outline:none}.bot-search:focus{border-color:var(--accent,#78a6ff);box-shadow:0 0 0 3px rgba(120,166,255,.12)}
