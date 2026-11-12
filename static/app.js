@@ -47,42 +47,26 @@
   const esc=value=>String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
   const date=value=>value?new Date(value*1000).toLocaleDateString("ar-IQ"):"—";
 
+  let cachedBots=[];
+  function renderBots(filter=""){
+    const box=byId("myBotsList");
+    const q=filter.trim().toLowerCase();
+    const bots=cachedBots.filter(bot=>[bot.username,bot.display_name,bot.notes].some(v=>(v||"").toLowerCase().includes(q)));
+    box.innerHTML=bots.length?bots.map(bot=>{
+      const name=esc(bot.display_name||("@"+bot.username));
+      return '<div class="bot-entry"><div class="admin-row"><div class="row-main"><b>🤖 '+name+'</b><small>@'+esc(bot.username)+' · رقم الربط: #'+bot.id+' · تاريخ الإضافة: '+date(bot.created_at)+'</small><span class="bot-state">مرتبط فقط · التشغيل خارجي</span></div><div class="bot-entry-actions"><button class="bot-disconnect" data-disconnect-bot="'+bot.id+'">فصل</button></div></div>'+
+      '<button class="bot-details-btn bot-details-open" type="button" data-bot-details="'+bot.id+'">📋 عرض تفاصيل البوت</button><div class="bot-details-panel" id="botDetails-'+bot.id+'" hidden>'+
+      '<div class="bot-detail-grid"><div><small>اسم المستخدم</small><b>@'+esc(bot.username)+'</b></div><div><small>رقم الربط</small><b>#'+bot.id+'</b></div><div><small>تاريخ الربط</small><b>'+date(bot.created_at)+'</b></div><div><small>نوع الربط</small><b>توكن خارجي</b></div></div>'+
+      '<div class="bot-settings-form"><label for="botDisplayName-'+bot.id+'">اسم مخصص للبوت (اختياري)</label><input id="botDisplayName-'+bot.id+'" maxlength="80" value="'+esc(bot.display_name||"")+'" placeholder="مثلاً: بوت التحميل"><label for="botNotes-'+bot.id+'">ملاحظاتك وإعداداتك الخاصة</label><textarea id="botNotes-'+bot.id+'" maxlength="1000" rows="3" placeholder="اكتب وصف البوت أو ملاحظاتك هنا...">'+esc(bot.notes||"") +'</textarea><button type="button" class="bot-details-btn bot-save-settings" data-save-bot="'+bot.id+'">💾 حفظ الإعدادات</button><small class="bot-save-status" id="botSaveStatus-'+bot.id+'" role="status"></small></div>'+
+      '<p>حالة Bot Center: التوكن محفوظ بشكل مشفّر. هذه إعدادات تنظيمية داخل المنصة فقط؛ لا تغيّر كود البوت أو تشغيله في المصنع الخارجي.</p><div class="bot-activity"><div class="bot-activity-heading">🕘 سجل نشاط البوت</div><div class="bot-activity-list" id="botActivity-'+bot.id+'"><small>افتح التفاصيل لعرض سجل النشاط...</small></div></div>'+
+      '<div class="bot-detail-actions"><button type="button" class="bot-details-btn" data-copy-bot="'+esc(bot.username)+'">نسخ اسم البوت</button><a href="https://t.me/'+encodeURIComponent(bot.username)+'" target="_blank" rel="noopener">فتح في تيليجرام ↗</a></div></div></div>';
+    }).join(""):'<p class="empty-state">'+(q?"ما لكيت بوت يطابق البحث.":"ما عندك بوتات مرتبطة حالياً.")+'</p>';
+  }
   async function loadBots(){
     const box=byId("myBotsList");
     box.innerHTML='<p class="empty-state">جاري تحميل البوتات...</p>';
-    try{
-      const bots=await api("/api/bots");
-      box.innerHTML=bots.length?bots.map(bot=>`
-        <div class="bot-entry">
-          <div class="admin-row">
-            <div class="row-main"><b>🤖 @${esc(bot.username)}</b><small>رقم الربط: #${bot.id} · تاريخ الإضافة: ${date(bot.created_at)}</small><span class="bot-state">مرتبط فقط · التشغيل خارجي</span></div>
-            <div class="bot-entry-actions"><button class="bot-disconnect" data-disconnect-bot="${bot.id}">فصل</button></div>
-          </div>
-          <button class="bot-details-btn bot-details-open" type="button" data-bot-details="${bot.id}">📋 عرض تفاصيل البوت</button>
-          <div class="bot-details-panel" id="botDetails-${bot.id}" hidden>
-            <div class="bot-detail-grid">
-              <div><small>اسم المستخدم</small><b>@${esc(bot.username)}</b></div>
-              <div><small>رقم الربط</small><b>#${bot.id}</b></div>
-              <div><small>تاريخ الربط</small><b>${date(bot.created_at)}</b></div>
-              <div><small>نوع الربط</small><b>توكن خارجي</b></div>
-            </div>
-            <div class="bot-settings-form">
-              <label for="botDisplayName-${bot.id}">اسم مخصص للبوت (اختياري)</label>
-              <input id="botDisplayName-${bot.id}" maxlength="80" value="${esc(bot.display_name||"")}" placeholder="مثلاً: بوت التحميل">
-              <label for="botNotes-${bot.id}">ملاحظاتك وإعداداتك الخاصة</label>
-              <textarea id="botNotes-${bot.id}" maxlength="1000" rows="3" placeholder="اكتب وصف البوت أو ملاحظاتك هنا...">${esc(bot.notes||"")}</textarea>
-              <button type="button" class="bot-details-btn bot-save-settings" data-save-bot="${bot.id}">💾 حفظ الإعدادات</button>
-              <small class="bot-save-status" id="botSaveStatus-${bot.id}" role="status"></small>
-            </div>
-            <p>حالة Bot Center: التوكن محفوظ بشكل مشفّر. هذه إعدادات تنظيمية داخل المنصة فقط؛ لا تغيّر كود البوت أو تشغيله في المصنع الخارجي.</p>
-            <div class="bot-activity">
-              <div class="bot-activity-heading">🕘 سجل نشاط البوت</div>
-              <div class="bot-activity-list" id="botActivity-${bot.id}"><small>افتح التفاصيل لعرض سجل النشاط...</small></div>
-            </div>
-            <div class="bot-detail-actions"><button type="button" class="bot-details-btn" data-copy-bot="${esc(bot.username)}">نسخ اسم البوت</button><a href="https://t.me/${encodeURIComponent(bot.username)}" target="_blank" rel="noopener">فتح في تيليجرام ↗</a></div>
-          </div>
-        </div>`).join(""):'<p class="empty-state">ما عندك بوتات مرتبطة حالياً.</p>';
-    }catch(e){box.innerHTML='<p class="empty-state error-text">'+esc(e.message)+'</p>';}
+    try{cachedBots=await api("/api/bots");renderBots(byId("botSearch")?.value||"");}
+    catch(e){box.innerHTML='<p class="empty-state error-text">'+esc(e.message)+'</p>';}
   }
   byId("addBotBtn").addEventListener("click",async()=>{
     const input=byId("botToken"),status=byId("botStatus"),button=byId("addBotBtn");
@@ -98,6 +82,7 @@
     finally{button.disabled=false;}
   });
   byId("refreshBots").addEventListener("click",loadBots);
+  byId("botSearch")?.addEventListener("input",event=>renderBots(event.target.value));
   async function loadBotActivity(id){
     const box=byId("botActivity-"+id);
     if(!box)return;
