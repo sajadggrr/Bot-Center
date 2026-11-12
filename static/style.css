@@ -78,3 +78,6 @@ body.en .hero-mark{text-align:left}
 .mini-action.unban,.mini-action.approve{border-color:#286b59;background:#173e35;color:#8ce5c2}.mini-action.reject{border-color:#75434e;background:#422530;color:#ffb7c1}
 .empty-state{font-size:11px;color:#9aa9c2;text-align:center;padding:12px 3px}.error-text{color:#ff9aa8}
 .admin-security{text-align:center;color:#8796b1;font-size:10px;margin:15px 0 0}
+
+.admin-access-status{margin:18px 0 0;padding:12px 14px;border:1px solid #785b36;border-radius:13px;background:#352919;color:#ffdda4;font-size:11px;line-height:1.8}
+.admin-access-status[hidden]{display:none}
