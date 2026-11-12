@@ -81,3 +81,19 @@ body.en .hero-mark{text-align:left}
 
 .admin-access-status{margin:18px 0 0;padding:12px 14px;border:1px solid #785b36;border-radius:13px;background:#352919;color:#ffdda4;font-size:11px;line-height:1.8}
 .admin-access-status[hidden]{display:none}
+
+
+.payment-admin-note{color:#9ba9c4;font-size:10px;line-height:1.8;margin:9px 0}
+.payment-method-editor{padding:12px 0;border-bottom:1px solid #293a57}
+.payment-method-editor:last-child{border-bottom:0}
+.payment-method-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.payment-method-top>b{font-size:12px}
+.switch-label{display:flex!important;align-items:center;gap:7px;margin:0!important;white-space:nowrap}
+.switch-label input{width:17px!important;height:17px;margin:0!important;accent-color:#7894ff}
+.payment-method-editor textarea{display:block;width:100%;margin-top:6px;min-height:75px;padding:10px;border:1px solid #344663;border-radius:11px;background:#0b1423;color:white;font:12px/1.7 Cairo;resize:vertical}
+.payment-method-editor>label{display:block;margin-top:10px;color:#aebbd3;font-size:10px}
+.payment-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.public-payment-button{display:flex;flex-direction:column;align-items:flex-start;gap:5px;padding:13px;border:1px solid #35496e;border-radius:14px;background:linear-gradient(145deg,#1a2945,#121d31);color:#f4f7ff;text-align:right;font:700 12px Cairo}
+.public-payment-button small{font-size:9px;color:#9ba9c4;font-weight:500}
+.public-payment-button:disabled{opacity:.55}
+.payment-user-section{margin-top:18px}
