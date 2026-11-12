@@ -128,3 +128,10 @@ body.en .hero-mark{text-align:left}
 .bot-details-panel[hidden]{display:none}
 
 .bot-details-open{display:block;width:100%;margin:8px 0 12px;padding:11px;font-size:12px;border-radius:11px;background:#243756;color:#fff}
+
+.bot-settings-form{display:grid;gap:7px;margin-top:14px;padding-top:12px;border-top:1px solid #304363}
+.bot-settings-form label{font-size:11px;color:#aebbd1;font-weight:700}
+.bot-settings-form input,.bot-settings-form textarea{width:100%;box-sizing:border-box;background:#101d31;border:1px solid #344968;border-radius:9px;color:#f1f5ff;padding:10px;font:12px Cairo;outline:none}
+.bot-settings-form textarea{resize:vertical;min-height:75px}
+.bot-save-settings{width:100%;padding:10px;margin-top:4px}
+.bot-save-status{color:#9bd9b0;font-size:10px;min-height:16px}
