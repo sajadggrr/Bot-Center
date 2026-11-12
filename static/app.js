@@ -56,8 +56,9 @@
         <div class="bot-entry">
           <div class="admin-row">
             <div class="row-main"><b>🤖 @${esc(bot.username)}</b><small>رقم الربط: #${bot.id} · تاريخ الإضافة: ${date(bot.created_at)}</small><span class="bot-state">مرتبط فقط · التشغيل خارجي</span></div>
-            <div class="bot-entry-actions"><button class="bot-details-btn" type="button" data-bot-details="${bot.id}">التفاصيل</button><button class="bot-disconnect" data-disconnect-bot="${bot.id}">فصل</button></div>
+            <div class="bot-entry-actions"><button class="bot-disconnect" data-disconnect-bot="${bot.id}">فصل</button></div>
           </div>
+          <button class="bot-details-btn bot-details-open" type="button" data-bot-details="${bot.id}">📋 عرض تفاصيل البوت</button>
           <div class="bot-details-panel" id="botDetails-${bot.id}" hidden>
             <div class="bot-detail-grid">
               <div><small>اسم البوت</small><b>@${esc(bot.username)}</b></div>
