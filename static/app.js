@@ -53,9 +53,21 @@
     try{
       const bots=await api("/api/bots");
       box.innerHTML=bots.length?bots.map(bot=>`
-        <div class="admin-row">
-          <div class="row-main"><b>🤖 @${esc(bot.username)}</b><small>رقم الربط: #${bot.id} · تاريخ الإضافة: ${date(bot.created_at)}</small><span class="bot-state">مرتبط فقط · التشغيل خارجي</span></div>
-          <button class="bot-disconnect" data-disconnect-bot="${bot.id}">فصل</button>
+        <div class="bot-entry">
+          <div class="admin-row">
+            <div class="row-main"><b>🤖 @${esc(bot.username)}</b><small>رقم الربط: #${bot.id} · تاريخ الإضافة: ${date(bot.created_at)}</small><span class="bot-state">مرتبط فقط · التشغيل خارجي</span></div>
+            <div class="bot-entry-actions"><button class="bot-details-btn" type="button" data-bot-details="${bot.id}">التفاصيل</button><button class="bot-disconnect" data-disconnect-bot="${bot.id}">فصل</button></div>
+          </div>
+          <div class="bot-details-panel" id="botDetails-${bot.id}" hidden>
+            <div class="bot-detail-grid">
+              <div><small>اسم البوت</small><b>@${esc(bot.username)}</b></div>
+              <div><small>رقم الربط</small><b>#${bot.id}</b></div>
+              <div><small>تاريخ الربط</small><b>${date(bot.created_at)}</b></div>
+              <div><small>نوع الربط</small><b>توكن خارجي</b></div>
+            </div>
+            <p>حالة Bot Center: متصل ومحفوظ بشكل مشفّر. حالة التشغيل والكود والسجلات تبقى لدى المصنع الخارجي حالياً.</p>
+            <div class="bot-detail-actions"><button type="button" class="bot-details-btn" data-copy-bot="${esc(bot.username)}">نسخ اسم البوت</button><a href="https://t.me/${encodeURIComponent(bot.username)}" target="_blank" rel="noopener">فتح في تيليجرام ↗</a></div>
+          </div>
         </div>`).join(""):'<p class="empty-state">ما عندك بوتات مرتبطة حالياً.</p>';
     }catch(e){box.innerHTML='<p class="empty-state error-text">'+esc(e.message)+'</p>';}
   }
@@ -74,6 +86,18 @@
   });
   byId("refreshBots").addEventListener("click",loadBots);
   byId("myBotsList").addEventListener("click",async event=>{
+    const details=event.target.closest("[data-bot-details]");
+    if(details){
+      const panel=byId("botDetails-"+details.dataset.botDetails);
+      if(panel){panel.hidden=!panel.hidden;details.textContent=panel.hidden?"التفاصيل":"إخفاء التفاصيل";}
+      return;
+    }
+    const copy=event.target.closest("[data-copy-bot]");
+    if(copy){
+      try{await navigator.clipboard.writeText("@"+copy.dataset.copyBot);copy.textContent="تم النسخ ✓";}
+      catch(e){alert("تعذر النسخ تلقائياً: @"+copy.dataset.copyBot);}
+      return;
+    }
     const button=event.target.closest("[data-disconnect-bot]");
     if(!button)return;
     if(!confirm("فصل هذا البوت من Bot Center؟ هذا لا يوقفه في المصنع الخارجي."))return;
