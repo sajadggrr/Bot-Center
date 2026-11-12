@@ -97,3 +97,18 @@ body.en .hero-mark{text-align:left}
 .public-payment-button small{font-size:9px;color:#9ba9c4;font-weight:500}
 .public-payment-button:disabled{opacity:.55}
 .payment-user-section{margin-top:18px}
+\n
+.bot-manager{margin-top:18px}
+.bot-mode-card{padding:14px;margin-top:12px;border:1px solid #304363;border-radius:16px;background:linear-gradient(145deg,#111d31,#0d1728)}
+.bot-mode-card h3{font-size:13px;margin:0 0 6px}
+.bot-mode-card p{font-size:10px;line-height:1.9;color:#9eacc5;margin:0 0 10px}
+.bot-token-label{display:block;color:#aebbd3;font-size:11px;margin:8px 0 5px}
+.bot-mode-card input{display:block;width:100%;padding:12px;border:1px solid #344663;border-radius:11px;background:#0b1423;color:white;font:12px Inter,sans-serif;direction:ltr;text-align:left;outline:none}
+.bot-mode-card input:focus{border-color:#7893ff;box-shadow:0 0 0 3px #7893ff20}
+.bot-feedback{min-height:17px;color:#83e4bd!important;margin:8px 0 0!important}
+.bot-feedback.error{color:#ff9aa8!important}
+.file-mode-card{border-style:dashed}
+.bot-coming{display:inline-block;padding:6px 9px;border-radius:9px;background:#2d2b20;color:#f3d69a;font-size:9px}
+.bot-list-heading{display:flex;justify-content:space-between;align-items:center;margin:17px 2px 5px;font-size:12px}
+.bot-state{display:inline-block;color:#f0d28b;background:#3b321e;border:1px solid #69572d;border-radius:8px;padding:4px 7px;font-size:9px;margin-top:5px}
+.bot-disconnect{border:1px solid #75434e;background:#422530;color:#ffb7c1;border-radius:9px;padding:7px 9px;font:700 10px Cairo;white-space:nowrap}
