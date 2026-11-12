@@ -75,6 +75,10 @@
               <small class="bot-save-status" id="botSaveStatus-${bot.id}" role="status"></small>
             </div>
             <p>حالة Bot Center: التوكن محفوظ بشكل مشفّر. هذه إعدادات تنظيمية داخل المنصة فقط؛ لا تغيّر كود البوت أو تشغيله في المصنع الخارجي.</p>
+            <div class="bot-activity">
+              <div class="bot-activity-heading">🕘 سجل نشاط البوت</div>
+              <div class="bot-activity-list" id="botActivity-${bot.id}"><small>افتح التفاصيل لعرض سجل النشاط...</small></div>
+            </div>
             <div class="bot-detail-actions"><button type="button" class="bot-details-btn" data-copy-bot="${esc(bot.username)}">نسخ اسم البوت</button><a href="https://t.me/${encodeURIComponent(bot.username)}" target="_blank" rel="noopener">فتح في تيليجرام ↗</a></div>
           </div>
         </div>`).join(""):'<p class="empty-state">ما عندك بوتات مرتبطة حالياً.</p>';
@@ -94,11 +98,24 @@
     finally{button.disabled=false;}
   });
   byId("refreshBots").addEventListener("click",loadBots);
+  async function loadBotActivity(id){
+    const box=byId("botActivity-"+id);
+    if(!box)return;
+    box.innerHTML='<small>جاري تحميل سجل النشاط...</small>';
+    try{
+      const items=await api("/api/bots/"+id+"/activity");
+      box.innerHTML=items.length?items.map(item=>`
+        <div class="bot-activity-item">
+          <span class="bot-activity-dot">●</span>
+          <div><b>${esc(item.action)}</b><small>${esc(item.details||"")} · ${date(item.created_at)}</small></div>
+        </div>`).join(""):'<small>لا توجد أنشطة مسجلة بعد.</small>';
+    }catch(e){box.innerHTML='<small class="error-text">'+esc(e.message)+'</small>';}
+  }
   byId("myBotsList").addEventListener("click",async event=>{
     const details=event.target.closest("[data-bot-details]");
     if(details){
       const panel=byId("botDetails-"+details.dataset.botDetails);
-      if(panel){panel.hidden=!panel.hidden;details.textContent=panel.hidden?"التفاصيل":"إخفاء التفاصيل";}
+      if(panel){panel.hidden=!panel.hidden;details.textContent=panel.hidden?"📋 عرض تفاصيل البوت":"إخفاء التفاصيل";if(!panel.hidden)loadBotActivity(details.dataset.botDetails);}
       return;
     }
     const save=event.target.closest("[data-save-bot]");
