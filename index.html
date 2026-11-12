@@ -40,6 +40,26 @@
       <span class="arrow" aria-hidden="true">‹</span>
     </article>
 
+    <section class="contact bot-manager" id="botManager">
+      <div class="contact-title"><div><span class="kicker">BOT WORKSPACE</span><h2>🤖 بوتاتي</h2><p>اربط بوتاتك الخارجية بالتوكن، أو جهّز مشاريعك للرفع.</p></div><div class="bubble">⚙</div></div>
+      <div class="bot-mode-card">
+        <h3>🔗 ربط بوت عن طريق التوكن</h3>
+        <p>أدخل توكن BotFather حتى نتحقق من البوت ونحفظه مشفّراً بحسابك.</p>
+        <label class="bot-token-label" for="botToken">توكن البوت</label>
+        <input id="botToken" type="password" autocomplete="off" placeholder="123456:ABC..." maxlength="256">
+        <button class="admin-action" id="addBotBtn" type="button">＋ ربط البوت</button>
+        <p class="bot-feedback" id="botStatus" role="status"></p>
+      </div>
+      <div class="bot-mode-card file-mode-card">
+        <h3>📦 رفع مشروع من الملفات</h3>
+        <p>يدعم تجهيز مشاريع Python وغيرها. رفع وتشغيل الملفات سيتفعّل بعد ربط مساحة تخزين دائمة وعامل تشغيل معزول؛ حتى لا نرفع ملفاتك إلى مساحة مؤقتة أو نشغّل كوداً غير موثوق داخل الخادم.</p>
+        <span class="bot-coming">قيد التجهيز — لن يتم قبول ملفات قبل اكتمال التشغيل الآمن</span>
+      </div>
+      <div class="bot-list-heading"><b>البوتات المرتبطة</b><button class="text-refresh" id="refreshBots" type="button">↻ تحديث</button></div>
+      <div id="myBotsList" class="admin-list"><p class="empty-state">جاري تحميل البوتات...</p></div>
+      <p class="backend-note">مهم: ربط توكن بوت منشأ من مصنع خارجي لا يوقفه ولا يتحكم بكوده. الفصل هنا يزيل بيانات ربطه من Bot Center فقط، ولا يوقفه في المصنع.</p>
+    </section>
+
     <section class="contact">
       <div class="contact-title">
         <div><span class="kicker" data-ar="تواصل مباشر" data-en="DIRECT CONTACT">تواصل مباشر</span><h2 data-ar="أرسل رسالتك" data-en="Send a message">أرسل رسالتك</h2><p data-ar="اكتب استفسارك وسنحاول إيصاله بأمان." data-en="Write your message and we'll try to deliver it securely.">اكتب استفسارك وسنحاول إيصاله بأمان.</p></div>
