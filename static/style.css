@@ -126,3 +126,5 @@ body.en .hero-mark{text-align:left}
 .bot-detail-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .bot-detail-actions a{color:#9eb3ff;font-size:10px;text-decoration:none;border:1px solid #35496e;border-radius:9px;padding:7px 9px}
 .bot-details-panel[hidden]{display:none}
+
+.bot-details-open{display:block;width:100%;margin:8px 0 12px;padding:11px;font-size:12px;border-radius:11px;background:#243756;color:#fff}
