@@ -147,14 +147,7 @@
     try{
       const me=await api("/api/me");
       if(me.is_owner){
-        try {
-          await api("/api/telegram/webhook/setup",{method:"POST"});
-          access.hidden=true;
-        } catch(webhookError) {
-          console.warn("Telegram control panel setup:", webhookError.message);
-          access.hidden=false;
-          access.textContent="لوحة الموقع تعمل، لكن تعذر تفعيل لوحة تيليجرام تلقائياً: "+webhookError.message;
-        }
+        access.hidden=true;
         byId("adminPanel").hidden=false;
         await refreshAdmin();
       }else{
