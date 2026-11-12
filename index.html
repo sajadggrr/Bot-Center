@@ -49,9 +49,21 @@
       <textarea id="message" maxlength="3000" placeholder="اكتب رسالتك هنا..." aria-describedby="count status"></textarea>
       <div class="form-meta"><span id="status" class="status" role="status" aria-live="polite"></span><span class="counter"><b id="count">0</b>/3000</span></div>
       <button class="send" id="sendBtn" type="button"><span data-ar="إرسال الرسالة" data-en="Send message">إرسال الرسالة</span><b>←</b></button>
-      <p class="backend-note" data-ar="إرسال الرسائل يحتاج إلى تشغيل الخادم الخلفي وربطه بالمنصة." data-en="Message delivery requires the backend server to be deployed and connected.">إرسال الرسائل يحتاج إلى تشغيل الخادم الخلفي وربطه بالمنصة.</p>
+      <p class="backend-note" data-ar="رسالتك تصل مباشرة إلى فريق Bot Center." data-en="Your message is delivered directly to the Bot Center team.">رسالتك تصل مباشرة إلى فريق Bot Center.</p>
     </section>
 
+    <section class="admin-panel" id="adminPanel" hidden>
+      <div class="admin-heading"><div><span class="kicker">PRIVATE WORKSPACE</span><h2>🛡️ لوحة المطوّر</h2><p>إدارة المنصة والمستخدمين والاشتراكات</p></div><button class="refresh-btn" id="refreshAdmin" type="button">↻ تحديث</button></div>
+      <div class="stats-grid" id="adminStats"><div class="stat-card"><small>المستخدمون</small><b id="statUsers">—</b></div><div class="stat-card"><small>البوتات</small><b id="statBots">—</b></div><div class="stat-card"><small>طلبات الدفع</small><b id="statPayments">—</b></div><div class="stat-card"><small>المحظورون</small><b id="statBanned">—</b></div></div>
+      <div class="admin-block"><div class="admin-block-title"><h3>⚙️ إعداد الاشتراك</h3><span>تحديد الخطة</span></div>
+        <label>اسم الخطة<input id="planName" maxlength="80" value="Premium"></label>
+        <div class="admin-fields"><label>السعر<input id="planPrice" maxlength="32" value="0" placeholder="مثال: 5000 د.ع"></label><label>المدة بالأيام<input id="planDays" type="number" min="1" max="3650" value="30"></label></div>
+        <button class="admin-action" id="savePlan" type="button">حفظ إعدادات الخطة</button><p class="admin-feedback" id="planStatus"></p>
+      </div>
+      <div class="admin-block"><div class="admin-block-title"><h3>💳 طلبات الاشتراك</h3><button class="text-refresh" id="refreshPayments" type="button">تحديث</button></div><div id="paymentsList" class="admin-list"><p class="empty-state">جاري التحميل...</p></div></div>
+      <div class="admin-block"><div class="admin-block-title"><h3>👥 المستخدمون</h3><button class="text-refresh" id="refreshUsers" type="button">تحديث</button></div><div id="usersList" class="admin-list"><p class="empty-state">جاري التحميل...</p></div></div>
+      <p class="admin-security">🔒 هذه اللوحة تظهر لحساب المطوّر المصرّح به فقط.</p>
+    </section>
     <footer><span>BOT CENTER</span><span data-ar="منصة قابلة للتطوير" data-en="BUILT TO SCALE">منصة قابلة للتطوير</span></footer>
   </main>
   <script>window.BOT_CENTER_API_URL = "https://bot-center-v2.vercel.app/api/message";</script>
