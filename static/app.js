@@ -156,7 +156,6 @@
           access.textContent="لوحة الموقع تعمل، لكن تعذر تفعيل لوحة تيليجرام تلقائياً: "+webhookError.message;
         }
         byId("adminPanel").hidden=false;
-        access.hidden=true;
         await refreshAdmin();
       }else{
         access.hidden=false;
