@@ -76,10 +76,22 @@
     finally{byId("refreshAdmin").disabled=false;}
   }
   async function initAdmin(){
+    const access=byId("adminAccessStatus");
     try{
       const me=await api("/api/me");
-      if(me.is_owner){byId("adminPanel").hidden=false;await refreshAdmin();}
-    }catch(e){console.warn("Admin panel unavailable:",e.message);}
+      if(me.is_owner){
+        byId("adminPanel").hidden=false;
+        access.hidden=true;
+        await refreshAdmin();
+      }else{
+        access.hidden=false;
+        access.textContent="تم فتح التطبيق، لكن حساب تيليجرام الحالي ليس معرّف المطوّر المسجّل في إعدادات الخادم.";
+      }
+    }catch(e){
+      access.hidden=false;
+      access.textContent="تعذر التحقق من صلاحية المطوّر: "+e.message;
+      console.warn("Admin panel unavailable:",e.message);
+    }
   }
   byId("refreshAdmin").addEventListener("click",refreshAdmin);
   byId("refreshUsers").addEventListener("click",loadUsers);
