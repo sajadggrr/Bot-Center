@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#0b1020">
   <meta name="description" content="Bot Center - منصة لإدارة تطبيقات البوتات">
   <title>Bot Center</title>
-  <link rel="stylesheet" href="./static/style.css">
+  <link rel="stylesheet" href="./static/style.css?v=adminfix1">
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
@@ -52,6 +52,7 @@
       <p class="backend-note" data-ar="رسالتك تصل مباشرة إلى فريق Bot Center." data-en="Your message is delivered directly to the Bot Center team.">رسالتك تصل مباشرة إلى فريق Bot Center.</p>
     </section>
 
+    <p class="admin-access-status" id="adminAccessStatus" role="status" hidden></p>
     <section class="admin-panel" id="adminPanel" hidden>
       <div class="admin-heading"><div><span class="kicker">PRIVATE WORKSPACE</span><h2>🛡️ لوحة المطوّر</h2><p>إدارة المنصة والمستخدمين والاشتراكات</p></div><button class="refresh-btn" id="refreshAdmin" type="button">↻ تحديث</button></div>
       <div class="stats-grid" id="adminStats"><div class="stat-card"><small>المستخدمون</small><b id="statUsers">—</b></div><div class="stat-card"><small>البوتات</small><b id="statBots">—</b></div><div class="stat-card"><small>طلبات الدفع</small><b id="statPayments">—</b></div><div class="stat-card"><small>المحظورون</small><b id="statBanned">—</b></div></div>
@@ -67,6 +68,6 @@
     <footer><span>BOT CENTER</span><span data-ar="منصة قابلة للتطوير" data-en="BUILT TO SCALE">منصة قابلة للتطوير</span></footer>
   </main>
   <script>window.BOT_CENTER_API_URL = "https://bot-center-v2.vercel.app/api/message";</script>
-  <script src="./static/app.js"></script>
+  <script src="./static/app.js?v=adminfix1"></script>
 </body>
 </html>
