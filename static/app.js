@@ -82,7 +82,8 @@
     catch(e){alert("تعذر الفصل: "+e.message);button.disabled=false;}
   });
   loadBots();
-\n  async function loadStats(){
+
+  async function loadStats(){
     const s=await api("/api/admin/stats");
     byId("statUsers").textContent=s.users;byId("statBots").textContent=s.bots;
     byId("statPayments").textContent=s.pending_payments;byId("statBanned").textContent=s.banned_users;
