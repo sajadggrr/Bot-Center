@@ -61,12 +61,20 @@
           <button class="bot-details-btn bot-details-open" type="button" data-bot-details="${bot.id}">📋 عرض تفاصيل البوت</button>
           <div class="bot-details-panel" id="botDetails-${bot.id}" hidden>
             <div class="bot-detail-grid">
-              <div><small>اسم البوت</small><b>@${esc(bot.username)}</b></div>
+              <div><small>اسم المستخدم</small><b>@${esc(bot.username)}</b></div>
               <div><small>رقم الربط</small><b>#${bot.id}</b></div>
               <div><small>تاريخ الربط</small><b>${date(bot.created_at)}</b></div>
               <div><small>نوع الربط</small><b>توكن خارجي</b></div>
             </div>
-            <p>حالة Bot Center: متصل ومحفوظ بشكل مشفّر. حالة التشغيل والكود والسجلات تبقى لدى المصنع الخارجي حالياً.</p>
+            <div class="bot-settings-form">
+              <label for="botDisplayName-${bot.id}">اسم مخصص للبوت (اختياري)</label>
+              <input id="botDisplayName-${bot.id}" maxlength="80" value="${esc(bot.display_name||"")}" placeholder="مثلاً: بوت التحميل">
+              <label for="botNotes-${bot.id}">ملاحظاتك وإعداداتك الخاصة</label>
+              <textarea id="botNotes-${bot.id}" maxlength="1000" rows="3" placeholder="اكتب وصف البوت أو ملاحظاتك هنا...">${esc(bot.notes||"")}</textarea>
+              <button type="button" class="bot-details-btn bot-save-settings" data-save-bot="${bot.id}">💾 حفظ الإعدادات</button>
+              <small class="bot-save-status" id="botSaveStatus-${bot.id}" role="status"></small>
+            </div>
+            <p>حالة Bot Center: التوكن محفوظ بشكل مشفّر. هذه إعدادات تنظيمية داخل المنصة فقط؛ لا تغيّر كود البوت أو تشغيله في المصنع الخارجي.</p>
             <div class="bot-detail-actions"><button type="button" class="bot-details-btn" data-copy-bot="${esc(bot.username)}">نسخ اسم البوت</button><a href="https://t.me/${encodeURIComponent(bot.username)}" target="_blank" rel="noopener">فتح في تيليجرام ↗</a></div>
           </div>
         </div>`).join(""):'<p class="empty-state">ما عندك بوتات مرتبطة حالياً.</p>';
@@ -91,6 +99,21 @@
     if(details){
       const panel=byId("botDetails-"+details.dataset.botDetails);
       if(panel){panel.hidden=!panel.hidden;details.textContent=panel.hidden?"التفاصيل":"إخفاء التفاصيل";}
+      return;
+    }
+    const save=event.target.closest("[data-save-bot]");
+    if(save){
+      const id=save.dataset.saveBot;
+      const name=byId("botDisplayName-"+id).value.trim();
+      const notes=byId("botNotes-"+id).value.trim();
+      const status=byId("botSaveStatus-"+id);
+      save.disabled=true;status.textContent="جاري الحفظ...";
+      try{
+        await api("/api/bots/"+id,{method:"PUT",body:JSON.stringify({display_name:name,notes})});
+        status.textContent="تم حفظ الإعدادات ✓";
+        tg?.HapticFeedback?.notificationOccurred("success");
+      }catch(e){status.textContent="تعذر الحفظ: "+e.message;}
+      finally{save.disabled=false;}
       return;
     }
     const copy=event.target.closest("[data-copy-bot]");
