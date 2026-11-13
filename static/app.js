@@ -223,9 +223,39 @@
   byId("savePaymentMethods").addEventListener("click",savePaymentMethods);
   loadPublicPaymentMethods();
 
+  async function loadFadehostApps(){
+    const box=byId("fadehostAppsList"),status=byId("fadehostStatus");
+    if(!box)return;
+    box.innerHTML='<p class="empty-state">جاري الاتصال بـ FadeHost...</p>';
+    if(status)status.textContent="";
+    try{
+      const result=await api("/api/admin/fadehost/bots");
+      const raw=result.bots;
+      const items=Array.isArray(raw)?raw:
+        Array.isArray(raw?.bots)?raw.bots:
+        Array.isArray(raw?.apps)?raw.apps:
+        raw?[raw]:[];
+      if(!items.length){
+        box.innerHTML='<p class="empty-state">تم الاتصال، لكن لم ترجع القائمة أي تطبيقات.</p>';
+        return;
+      }
+      box.innerHTML=items.map(item=>{
+        const name=esc(item.name||item.app_name||item.display_name||item.id||"تطبيق FadeHost");
+        const id=esc(item.id||item.app_id||"—");
+        const state=esc(item.status||item.state||"غير محدد");
+        const runtime=esc(item.runtime||item.language||"");
+        const repo=esc(item.repository||item.repo||item.github_repo||"");
+        return '<div class="bot-entry"><div class="admin-row"><div class="row-main"><b>☁️ '+name+'</b><small>المعرّف: '+id+(runtime?' · البيئة: '+runtime:'')+(repo?' · المستودع: '+repo:'')+'</small><span class="bot-state">الحالة: '+state+'</span></div></div></div>';
+      }).join("");
+      if(status)status.textContent="تم جلب قائمة FadeHost بنجاح ✓";
+    }catch(e){
+      box.innerHTML='<p class="empty-state error-text">'+esc(e.message)+'</p>';
+      if(status)status.textContent="تعذر تحميل تطبيقات FadeHost.";
+    }
+  }
   async function refreshAdmin(){
     byId("refreshAdmin").disabled=true;
-    try{await Promise.all([loadStats(),loadPlan(),loadUsers(),loadPayments(),loadPaymentMethodsAdmin()]);}
+    try{await Promise.all([loadStats(),loadPlan(),loadUsers(),loadPayments(),loadPaymentMethodsAdmin(),loadFadehostApps()]);}
     catch(e){console.error(e);}
     finally{byId("refreshAdmin").disabled=false;}
   }
@@ -248,6 +278,7 @@
     }
   }
   byId("refreshAdmin").addEventListener("click",refreshAdmin);
+  byId("refreshFadehost")?.addEventListener("click",loadFadehostApps);
   byId("refreshUsers").addEventListener("click",loadUsers);
   byId("refreshPayments").addEventListener("click",loadPayments);
   byId("savePlan").addEventListener("click",async()=>{
