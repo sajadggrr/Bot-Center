@@ -245,7 +245,7 @@
         const state=esc(item.status||item.state||"غير محدد");
         const runtime=esc(item.runtime||item.language||"");
         const repo=esc(item.repository||item.repo||item.github_repo||"");
-        return '<div class="bot-entry"><div class="admin-row"><div class="row-main"><b>☁️ '+name+'</b><small>المعرّف: '+id+(runtime?' · البيئة: '+runtime:'')+(repo?' · المستودع: '+repo:'')+'</small><span class="bot-state">الحالة: '+state+'</span></div></div></div>';
+        return '<div class="bot-entry"><div class="admin-row"><div class="row-main"><b>☁️ '+name+'</b><small>المعرّف: '+id+(runtime?' · البيئة: '+runtime:'')+(repo?' · المستودع: '+repo:'')+'</small><span class="bot-state">الحالة: '+state+'</span><button type="button" class="text-refresh" data-fadehost-logs="'+id+'">📄 عرض السجلات</button></div></div><pre class="fadehost-log-output" hidden style="white-space:pre-wrap;overflow-wrap:anywhere;max-height:360px;overflow:auto;padding:12px;border-radius:10px;background:#080d18;color:#d7e2f3;font-size:12px;direction:ltr;text-align:left"></pre></div>';
       }).join("");
       if(status)status.textContent="تم جلب قائمة FadeHost بنجاح ✓";
     }catch(e){
@@ -289,6 +289,27 @@
     }catch(e){status.textContent="تعذر الحفظ: "+e.message;}
   });
   document.addEventListener("click",async event=>{
+    const logsButton=event.target.closest("[data-fadehost-logs]");
+    if(logsButton){
+      const botId=logsButton.dataset.fadehostLogs;
+      const output=logsButton.closest(".bot-entry")?.querySelector(".fadehost-log-output");
+      if(!output)return;
+      logsButton.disabled=true;
+      logsButton.textContent="⏳ جاري جلب السجلات...";
+      output.hidden=false;
+      output.textContent="جاري الاتصال بـ FadeHost...";
+      try{
+        const result=await api("/api/admin/fadehost/bots/"+encodeURIComponent(botId)+"/logs");
+        const logs=result.logs;
+        output.textContent=typeof logs==="string"?logs:JSON.stringify(logs,null,2);
+        if(!output.textContent)output.textContent="لا توجد سجلات متاحة حالياً.";
+        logsButton.textContent="↻ تحديث السجلات";
+      }catch(e){
+        output.textContent="تعذر جلب السجلات: "+e.message;
+        logsButton.textContent="📄 إعادة المحاولة";
+      }finally{logsButton.disabled=false;}
+      return;
+    }
     const ban=event.target.closest("[data-user]");
     if(ban){
       const id=ban.dataset.user,banned=ban.dataset.banned!=="true";
