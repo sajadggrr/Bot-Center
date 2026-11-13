@@ -245,7 +245,7 @@
         const state=esc(item.status||item.state||"غير محدد");
         const runtime=esc(item.runtime||item.language||"");
         const repo=esc(item.repository||item.repo||item.github_repo||"");
-        return '<div class="bot-entry"><div class="admin-row"><div class="row-main"><b>☁️ '+name+'</b><small>المعرّف: '+id+(runtime?' · البيئة: '+runtime:'')+(repo?' · المستودع: '+repo:'')+'</small><span class="bot-state">الحالة: '+state+'</span><button type="button" class="text-refresh" data-fadehost-logs="'+id+'">📄 عرض السجلات</button></div></div><pre class="fadehost-log-output" hidden style="white-space:pre-wrap;overflow-wrap:anywhere;max-height:360px;overflow:auto;padding:12px;border-radius:10px;background:#080d18;color:#d7e2f3;font-size:12px;direction:ltr;text-align:left"></pre></div>';
+        return '<div class="bot-entry"><div class="admin-row"><div class="row-main"><b>☁️ '+name+'</b><small>المعرّف: '+id+(runtime?' · البيئة: '+runtime:'')+(repo?' · المستودع: '+repo:'')+'</small><span class="bot-state">الحالة: '+state+'</span><button type="button" class="text-refresh" data-fadehost-logs="'+id+'">📄 عرض السجلات</button> <button type="button" class="text-refresh" data-fadehost-deployments="'+id+'">📦 سجل النشر</button></div></div><pre class="fadehost-deployments-output" hidden style="white-space:pre-wrap;overflow-wrap:anywhere;max-height:300px;overflow:auto;padding:12px;border-radius:10px;background:#101827;color:#d7e2f3;font-size:12px;direction:ltr;text-align:left"></pre><pre class="fadehost-log-output" hidden style="white-space:pre-wrap;overflow-wrap:anywhere;max-height:360px;overflow:auto;padding:12px;border-radius:10px;background:#080d18;color:#d7e2f3;font-size:12px;direction:ltr;text-align:left"></pre></div>';
       }).join("");
       if(status)status.textContent="تم جلب قائمة FadeHost بنجاح ✓";
     }catch(e){
@@ -289,6 +289,27 @@
     }catch(e){status.textContent="تعذر الحفظ: "+e.message;}
   });
   document.addEventListener("click",async event=>{
+    const deploymentsButton=event.target.closest("[data-fadehost-deployments]");
+    if(deploymentsButton){
+      const botId=deploymentsButton.dataset.fadehostDeployments;
+      const output=deploymentsButton.closest(".bot-entry")?.querySelector(".fadehost-deployments-output");
+      if(!output)return;
+      deploymentsButton.disabled=true;
+      deploymentsButton.textContent="⏳ جاري جلب سجل النشر...";
+      output.hidden=false;
+      output.textContent="جاري الاتصال بـ FadeHost...";
+      try{
+        const result=await api("/api/admin/fadehost/bots/"+encodeURIComponent(botId)+"/deployments");
+        const deployments=result.deployments;
+        output.textContent=typeof deployments==="string"?deployments:JSON.stringify(deployments,null,2);
+        if(!output.textContent)output.textContent="لا توجد عمليات نشر مسجلة حالياً.";
+        deploymentsButton.textContent="↻ تحديث سجل النشر";
+      }catch(e){
+        output.textContent="تعذر جلب سجل النشر: "+e.message;
+        deploymentsButton.textContent="📦 إعادة المحاولة";
+      }finally{deploymentsButton.disabled=false;}
+      return;
+    }
     const logsButton=event.target.closest("[data-fadehost-logs]");
     if(logsButton){
       const botId=logsButton.dataset.fadehostLogs;
