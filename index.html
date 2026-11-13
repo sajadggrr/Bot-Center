@@ -77,6 +77,11 @@
     <section class="admin-panel" id="adminPanel" hidden>
       <div class="admin-heading"><div><span class="kicker">PRIVATE WORKSPACE</span><h2>🛡️ لوحة المطوّر</h2><p>إدارة المنصة والمستخدمين والاشتراكات</p></div><button class="refresh-btn" id="refreshAdmin" type="button">↻ تحديث</button></div>
       <div class="stats-grid" id="adminStats"><div class="stat-card"><small>المستخدمون</small><b id="statUsers">—</b></div><div class="stat-card"><small>البوتات</small><b id="statBots">—</b></div><div class="stat-card"><small>طلبات الدفع</small><b id="statPayments">—</b></div><div class="stat-card"><small>المحظورون</small><b id="statBanned">—</b></div></div>
+      <div class="admin-block"><div class="admin-block-title"><h3>☁️ تطبيقات FadeHost</h3><button class="text-refresh" id="refreshFadehost" type="button">↻ تحديث</button></div>
+        <p class="payment-admin-note">عرض التطبيقات المستضافة وحالتها من FadeHost. هذه المرحلة للعرض فقط؛ لا تنفّذ تشغيل أو إيقاف أو حذف.</p>
+        <div id="fadehostAppsList" class="admin-list"><p class="empty-state">جاري الاتصال بـ FadeHost...</p></div>
+        <p class="admin-feedback" id="fadehostStatus" role="status"></p>
+      </div>
       <div class="admin-block"><div class="admin-block-title"><h3>⚙️ إعداد الاشتراك</h3><span>تحديد الخطة</span></div>
         <label>اسم الخطة<input id="planName" maxlength="80" value="Premium"></label>
         <div class="admin-fields"><label>السعر<input id="planPrice" maxlength="32" value="0" placeholder="مثال: 5000 د.ع"></label><label>المدة بالأيام<input id="planDays" type="number" min="1" max="3650" value="30"></label></div>
@@ -101,6 +106,6 @@
     <footer><span>BOT CENTER</span><span data-ar="منصة قابلة للتطوير" data-en="BUILT TO SCALE">منصة قابلة للتطوير</span></footer>
   </main>
   <script>window.BOT_CENTER_API_URL = "https://bot-center-v2.vercel.app/api/message";</script>
-  <script src="./static/app.js?v=botsearch1"></script>
+  <script src="./static/app.js?v=fadehost1"></script>
 </body>
 </html>
